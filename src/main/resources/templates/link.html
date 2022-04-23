@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <title>Link cutter</title>
+</head>
+<body>
+
+<div>
+    <p th:text="${link.url}"></p>
+    <p th:text="${originallink.url}"></p>
+</div>
+</body>
+</html>

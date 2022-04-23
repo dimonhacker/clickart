@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <title>Link cutter</title>
+</head>
+<body>
+<h1>Link cutter</h1>
+<h3>The test project by Dmitry Petrov. Works on Spring Boot, Spring Data. Require to enable cookies.</h3>
+<div class="outer">
+<div class = "inner">
+<form id="clickform" method="POST" action="/create">
+    <label for="url"></label>
+    <input type="text" placeholder="http://..." name="url" id="url"/><br><br>
+    <input type="submit" value="Click" class="buttons">
+</form>
+    <div id="placeholder"></div>
+    <!--<div><p th:text = "'Ваши ссылки: '+ ${links}"></p></div>-->
+    <div th:each="shortlink: ${links}">
+        <a th:href="'link/'+${shortlink.id}"><p th:text="${shortlink.url}"></p></a>
+    </div>
+</div>
+</div>
+<script th:src="@{/script.js}"></script>
+</body>
+</html>
