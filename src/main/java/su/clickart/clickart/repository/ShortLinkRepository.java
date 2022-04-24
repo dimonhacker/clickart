@@ -8,6 +8,9 @@ import su.clickart.clickart.entity.User;
 import java.util.List;
 
 @Repository
-public interface ShortLinkRepository extends CrudRepository<ShortLink,Long> {
+public interface ShortLinkRepository extends CrudRepository<ShortLink, Long> {
     public List<ShortLink> findByUser(User user);
+
+    public ShortLink findByUrl(String url);
+
 }

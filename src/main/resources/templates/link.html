@@ -8,8 +8,11 @@
 <body>
 
 <div>
-    <p th:text="${link.url}"></p>
+    <a th:href="${link.url}"><p th:text="${link.url}"></p></a>
     <p th:text="${originallink.url}"></p>
+</div>
+<div>
+    <a th:href="'/link/delete/'+${link.url}"><p>Delete url</p></a>
 </div>
 <div>
     <a href="/">start page</a>

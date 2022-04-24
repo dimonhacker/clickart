@@ -2,7 +2,7 @@ package su.clickart.clickart.entity;
 
 import javax.persistence.*;
 
-@Table(name="shortlink")
+@Table(name = "shortlink")
 @Entity
 public class ShortLink {
     @Id
@@ -13,7 +13,7 @@ public class ShortLink {
     private String url;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn (name="user_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

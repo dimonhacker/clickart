@@ -3,19 +3,20 @@ package su.clickart.clickart.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import su.clickart.clickart.entity.OriginalLink;
 import su.clickart.clickart.entity.ShortLink;
 import su.clickart.clickart.entity.User;
-import su.clickart.clickart.repository.UserRepository;
-import su.clickart.clickart.service.ShortLinkService;
+import su.clickart.clickart.service.LinkService;
 import su.clickart.clickart.service.UserService;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -26,31 +27,48 @@ public class UserController {
     UserService userService;
 
     @Autowired
-    ShortLinkService shortLinkService;
+    LinkService linkService;
+
 
     @GetMapping("/")
-    public String getIndex(@RequestParam (value = "shortLink", required = false) String shortLink, @CookieValue(value = "user", required = false) String userCookie, Model model, HttpServletResponse response){
+    public String getIndex(@CookieValue(value = "user", required = false) String userCookie, Model model, HttpServletResponse response) {
         User user = null;
-        if(userCookie==null){
+        model.addAttribute("originalLink", new OriginalLink());
+        boolean cookieIsOk=false;
+        if(userCookie!=null){
+            List<User> users;
+            users = userService.getUsersByName(userCookie);
+            if (users!=null) {user = users.get(0); cookieIsOk=true;}
+        }
+        if (!cookieIsOk) {
             user = new User();
             Cookie cookie = userService.createCookie();
             response.addCookie(cookie);
             user.setName(String.valueOf(cookie.getValue()));
             userService.saveUser(user);
         }
-        else {
-            List<User> users = userService.getUsersByName(userCookie);
-            if (users.size() > 0) user = users.get(0);
-        }
-        List<ShortLink> links = shortLinkService.getShortLinks(user);
-        model.addAttribute("links",links);
-        return "index.html";
+        List<ShortLink> links = linkService.getShortLinks(user);
+        model.addAttribute("links", links);
+        return "index";
     }
 
-    @PostMapping("/create")
-    public String createShortLink(@RequestParam(value = "url", required = false) String url, @CookieValue(value = "user", required = false) String userCookie, Model model, HttpServletResponse response){
+
+    @PostMapping("/")
+    public String createShortLink(@Valid @ModelAttribute("originalLink") OriginalLink originalLink, BindingResult bindingResult, @CookieValue(value = "user", required = true) String userCookie, Model model) {
+
+        if (bindingResult.hasErrors()) {
+            System.out.println(bindingResult.getErrorCount());
+            return "index";
+        }
         User user = null;
-        if(userCookie==null){
+        List<User> users = userService.getUsersByName(userCookie);
+        if (users != null) user = users.get(0);
+        ShortLink shortLink = new ShortLink();
+        shortLink.setUrl(linkService.genUrl());
+        shortLink.setUser(user);
+        shortLink.setOriginalLink(originalLink);
+        linkService.saveShortLink(shortLink);
+        /*if(userCookie==null){
             user = new User();
             Cookie cookie = userService.createCookie();
             user.setName(String.valueOf(cookie.getValue()));
@@ -71,7 +89,7 @@ public class UserController {
             shortLinkService.saveShortLink(shortLink);
             model.addAttribute("url", url);
             System.out.println(url);
-        }
-        return "redirect:/?shortLink="+url;
+        }*/
+        return "redirect:/?shortLink=" + shortLink.getUrl();
     }
 }

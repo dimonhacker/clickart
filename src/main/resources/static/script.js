@@ -1,6 +1,6 @@
 let shortLink =GetURLParameter("shortLink");
 if(!!shortLink){
-    document.getElementById("placeholder").innerText=shortLink;
+    document.getElementById("placeholder").innerText="Last link: "+shortLink;
 }
 function GetURLParameter(sParam)
 {

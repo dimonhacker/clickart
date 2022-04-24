@@ -1,6 +1,11 @@
 package su.clickart.clickart.entity;
 
+import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.URL;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 @Table(name = "originallink")
 @Entity
@@ -9,10 +14,12 @@ public class OriginalLink {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Field can not be empty")
+    @URL(regexp = "^(http|https).*", message = "Make sure the url is valid")
     @Column
     private String url;
 
-    @OneToOne(mappedBy = "originalLink")
+    @OneToOne(mappedBy = "originalLink", cascade = CascadeType.ALL)
     private ShortLink shortLink;
 
     public Long getId() {

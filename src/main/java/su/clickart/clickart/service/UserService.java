@@ -11,21 +11,25 @@ import java.util.List;
 @Service
 public class UserService {
 
+
     @Autowired
     private UserRepository userRepository;
-    public void saveUser(User user){
+
+    public void saveUser(User user) {
         userRepository.save(user);
     }
 
-    public List<User> getUsersByName(String name){
+    public List<User> getUsersByName(String name) {
         return userRepository.findByName(name);
     }
 
-    public Cookie createCookie(){
-        int val = String.valueOf(Math.random()*100000).hashCode();
+    public Cookie createCookie() {
+        int val = String.valueOf(Math.random() * 100000).hashCode();
         Cookie cookie = new Cookie("user", String.valueOf(val));
         cookie.setPath("/");
         cookie.setMaxAge(Integer.MAX_VALUE);
         return cookie;
     }
+
+
 }

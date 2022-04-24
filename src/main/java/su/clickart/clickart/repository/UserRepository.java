@@ -7,6 +7,6 @@ import su.clickart.clickart.entity.User;
 import java.util.List;
 
 @Repository
-public interface UserRepository extends CrudRepository<User,Long> {
+public interface UserRepository extends CrudRepository<User, Long> {
     public List<User> findByName(String name);
 }

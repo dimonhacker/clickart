@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"  xmlns:th="http://www.thymeleaf.org">
 <head>
-
     <meta charset="UTF-8">
     <link rel="stylesheet" th:href="@{/style.css}">
     <title>Link cutter</title>
@@ -11,15 +10,18 @@
 <h3>The test project by Dmitry Petrov. Works on Spring Boot, Spring Data, Thymeleaf. Require to enable cookies.</h3>
 <div class="outer">
 <div class = "inner">
-<form id="clickform" method="POST" action="/create">
-    <label for="url"></label>
-    <input type="text" placeholder="http://..." name="url" id="url"/><br><br>
-    <input type="submit" value="Click" class="buttons">
+<form th:method="POST"  th:action="@{/}" th:object="${originalLink}">
+    <label for="url">Enter url: </label>
+    <input type="text"  th:field="*{url}" id="url"/>
+    <div th:if="${#fields.hasErrors('url')}" th:errors="*{url}" id="errors"></div>
+    <br><br>
+    <input type="submit" value="Click" class="buttons" id="originalLink">
 </form>
-    <div id="placeholder"></div>
-    <!--<div><p th:text = "'Ваши ссылки: '+ ${links}"></p></div>-->
+    <div id="placeholder"></div><br><br>
+    <div th:if="${not #lists.isEmpty(links)}">Your links</div><br>
     <div th:each="shortlink: ${links}">
-        <a th:href="'link/'+${shortlink.id}"><p th:text="${shortlink.url}"></p></a>
+        Details: <a th:href="'link/'+${shortlink.id}"><span th:text="${shortlink.url}"></span></a>&nbsp;&nbsp;
+        ShortLink: <a th:href="'link/'+${shortlink.url}"><span th:text="${shortlink.url}"></span></a>
     </div>
 </div>
 </div>
