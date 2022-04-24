@@ -28,6 +28,7 @@ public class UserService {
         Cookie cookie = new Cookie("user", String.valueOf(val));
         cookie.setPath("/");
         cookie.setMaxAge(Integer.MAX_VALUE);
+
         return cookie;
     }
 

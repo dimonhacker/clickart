@@ -22,6 +22,7 @@ public class LinkService {
     @Autowired
     LinkGenerator linkGenerator;
 
+
     public List<ShortLink> getShortLinks(User user) {
         return shortLinkRepository.findByUser(user);
     }

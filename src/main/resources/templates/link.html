@@ -12,6 +12,9 @@
     <p th:text="${originallink.url}"></p>
 </div>
 <div>
+    <img th:src="@{'data:image/jpeg;base64,'+${QR}}" />
+</div>
+<div>
     <a th:href="'/link/delete/'+${link.url}"><p>Delete url</p></a>
 </div>
 <div>
