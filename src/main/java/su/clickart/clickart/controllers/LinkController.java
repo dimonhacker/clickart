@@ -53,7 +53,13 @@ public class LinkController {
         }
 
         if (isLink) {
-            ShortLink shortLink = linkService.findByUrl(id);
+            ShortLink shortLink = null;
+            try{
+            shortLink = linkService.findByUrl(id);
+            } catch(NoSuchElementException exception) {
+                 response.setStatus(404);
+                 return "404.html";
+            }
             String url = shortLink.getOriginalLink().getUrl();
             if (url != null) {
                 return "redirect:" + url;
