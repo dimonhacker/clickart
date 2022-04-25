@@ -32,7 +32,7 @@ public class LinkService {
     }
 
     public ShortLink getById(Long id) {
-        return shortLinkRepository.findById(id).get();
+        return shortLinkRepository.findById(id).orElse(null);
     }
 
     public ShortLink findByUrl(String url) {

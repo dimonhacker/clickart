@@ -23,11 +23,21 @@ public class GeneratorQR {
     @Autowired
     MyIp ip;
 
-    public String createQR(String data, String charset, int height, int width) throws WriterException, IOException {
-        data = "http://" + ip.getIp()+ "/link/" + data;
-        BitMatrix matrix = new MultiFormatWriter().encode(new String(data.getBytes(charset), charset), BarcodeFormat.QR_CODE, width, height);
-        BufferedImage bufferedImage = MatrixToImageWriter.toBufferedImage(matrix, new MatrixToImageConfig(Color.BLACK.getRGB(), Color.WHITE.getRGB()));
-        return imgToBase64String(bufferedImage, "png");
+    public String createQR(String data, String charset, int height, int width) {
+        data = "http://" + ip.getIp() + "/link/" + data;
+        BitMatrix matrix = null;
+        BufferedImage bufferedImage = null;
+        try {
+            matrix = new MultiFormatWriter().encode(new String(data.getBytes(charset), charset), BarcodeFormat.QR_CODE, width, height);
+            bufferedImage = MatrixToImageWriter.toBufferedImage(matrix, new MatrixToImageConfig(Color.BLACK.getRGB(), Color.WHITE.getRGB()));
+        } catch (WriterException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        if (bufferedImage != null)
+            return imgToBase64String(bufferedImage, "png");
+        else return null;
     }
 
     public static String imgToBase64String(final BufferedImage img, final String formatName) {
