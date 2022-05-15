@@ -3,7 +3,7 @@ package su.clickart.clickart.entity;
 import javax.persistence.*;
 import java.util.List;
 
-@Table(name = "user")
+@Table(name = "users")
 @Entity
 public class User {
 

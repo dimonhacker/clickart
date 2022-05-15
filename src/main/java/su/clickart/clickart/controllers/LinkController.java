@@ -1,20 +1,21 @@
 package su.clickart.clickart.controllers;
 
-import com.google.zxing.WriterException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import su.clickart.clickart.entity.ShortLink;
+import su.clickart.clickart.entity.User;
 import su.clickart.clickart.service.GeneratorQR;
 import su.clickart.clickart.service.LinkService;
+import su.clickart.clickart.service.UserService;
 
 import javax.servlet.http.HttpServletResponse;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Controller
@@ -27,14 +28,32 @@ public class LinkController {
     @Autowired
     GeneratorQR generatorQR;
 
+    @Autowired
+    UserService userService;
+
     @GetMapping("/{id}")
-    public String index(@PathVariable("id") String id, Model model, HttpServletResponse response) {
+    public String index(@PathVariable("id") String id, @CookieValue(value = "user", required = false) String userCookie,  Model model, HttpServletResponse response) {
         boolean isLink = false;
+        User user = null;
+        boolean cookieIsOk=false;
         try {
             Long val = Long.parseLong(id);
+            if(userCookie!=null){
+                List<User> users;
+                users = userService.getUsersByName(userCookie);
+                if (users!=null && users.size()>0) {user = users.get(0);cookieIsOk=true;}
+            }
+            else {
+                response.setStatus(403);
+                return "403.html";
+            }
             ShortLink shortLink;
             shortLink = linkService.getById(val);
             if (shortLink != null) {
+                if(shortLink.getUser().getId()!=user.getId()) {
+                    response.setStatus(403);
+                    return "403.html";
+                }
                 String base64Image = generatorQR.createQR(shortLink.getUrl(), Charset.defaultCharset().toString(), 200, 200);
                 if (base64Image != null)
                     model.addAttribute("QR", base64Image);

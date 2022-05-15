@@ -1,11 +1,9 @@
 package su.clickart.clickart.entity;
 
-import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.URL;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
 
 @Table(name = "originallink")
 @Entity

@@ -38,7 +38,7 @@ public class UserController {
         if(userCookie!=null){
             List<User> users;
             users = userService.getUsersByName(userCookie);
-            if (users!=null) {user = users.get(0); cookieIsOk=true;}
+            if (users!=null && users.size()>0) {user = users.get(0); cookieIsOk=true;}
         }
         if (!cookieIsOk) {
             user = new User();
@@ -57,7 +57,6 @@ public class UserController {
     public String createShortLink(@Valid @ModelAttribute("originalLink") OriginalLink originalLink, BindingResult bindingResult, @CookieValue(value = "user", required = true) String userCookie, Model model) {
 
         if (bindingResult.hasErrors()) {
-            System.out.println(bindingResult.getErrorCount());
             return "index";
         }
         User user = null;

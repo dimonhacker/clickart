@@ -15,3 +15,15 @@ function GetURLParameter(sParam)
         }
     }
 }
+
+function copy(link) {
+  var copyText = document.getElementById(link);
+    navigator.clipboard.writeText(copyText.href)
+          .then(() => {
+            alert("successfully copied");
+          })
+          .catch(() => {
+            alert("something went wrong");
+          });
+
+}

@@ -6,19 +6,23 @@
     <title>Link cutter</title>
 </head>
 <body>
-
-<div>
-    <a th:href="${link.url}"><p th:text="${link.url}"></p></a>
-    <p th:text="${originallink.url}"></p>
-</div>
-<div>
-    <img th:src="@{'data:image/jpeg;base64,'+${QR}}" th:if="${QR}" />
-</div>
-<div>
-    <a th:href="'/link/delete/'+${link.url}"><p>Delete url</p></a>
-</div>
-<div>
-    <a href="/">start page</a>
+<h1>Link Details</h1>
+<div class="outer">
+    <div class = "inner">
+        <div>
+            <a th:href="${link.url}"><p th:text="${link.url}"></p></a>
+            <p th:text="${originallink.url}"></p>
+        </div>
+        <div>
+            <img th:src="@{'data:image/jpeg;base64,'+${QR}}" th:if="${QR}" />
+        </div>
+        <div>
+            <a th:href="'/link/delete/'+${link.url}"><p>Delete url</p></a>
+        </div>
+        <div>
+            <a href="/">Home page</a>
+        </div>
+    </div>
 </div>
 </body>
 </html>

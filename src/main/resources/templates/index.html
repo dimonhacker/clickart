@@ -7,21 +7,22 @@
 </head>
 <body>
 <h1>Link cutter</h1>
-<h3>The test project by Dmitry Petrov. Works on Spring Boot, Spring Data, Thymeleaf. Require to enable cookies.</h3>
+<!--h3>The test project by Dmitriy Petrov. Works on Spring Boot, Spring Data JPA, Thymeleaf, Hibernate validator, Zxing (QR Code). Require to enable cookies.</h3-->
 <div class="outer">
 <div class = "inner">
 <form th:method="POST"  th:action="@{/}" th:object="${originalLink}">
-    <label for="url">Enter url: </label>
-    <input type="text"  th:field="*{url}" id="url"/>
+    <div>
+    <input type="text"  th:field="*{url}" id="url"/><input type="submit" value="Click" class="buttons" id="originalLink">
+    </div>
     <div th:if="${#fields.hasErrors('url')}" th:errors="*{url}" id="errors"></div>
     <br><br>
-    <input type="submit" value="Click" class="buttons" id="originalLink">
+
 </form>
     <div id="placeholder"></div><br><br>
     <div th:if="${not #lists.isEmpty(links)}">Your links</div><br>
     <div th:each="shortlink: ${links}">
         Details: <a th:href="'link/'+${shortlink.id}"><span th:text="${shortlink.url}"></span></a>&nbsp;&nbsp;
-        ShortLink: <a th:href="'link/'+${shortlink.url}"><span th:text="${shortlink.url}"></span></a>
+        ShortLink: <a th:href="'link/'+${shortlink.url}" th:id="${shortlink.url}"><span th:text="${shortlink.url}" ></span></a>&nbsp;&nbsp;<a th:attr="onclick='copy(\''+${shortlink.url}+'\')'" th:href="@{#}"><img th:src="@{/copy.png}"></a>
     </div>
 </div>
 </div>
